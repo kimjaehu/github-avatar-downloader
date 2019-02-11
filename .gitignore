@@ -1,3 +1,6 @@
+# File containing secrets
+secrets.js
+
 # Logs
 logs
 *.log
@@ -78,3 +81,4 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+
