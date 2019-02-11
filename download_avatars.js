@@ -1,6 +1,11 @@
 var request = require('request');
 var fs = require('fs');
 var secrets = require('./secrets.js');
+var args = process.argv.slice(2);
+var repoOwner = args[0];
+var repoName = args[1];
+
+//console.log(repoOwner, repoName);
 
 function getRepoContributors(repoOwner, repoName, cb) {
 
@@ -51,4 +56,4 @@ function downloadImageByURL(avatarUrl, filePath) {
 //     fs.mkdir(filePath, { recursive: true });
 // }
 // fs.makeFolder(filePath)
-getRepoContributors("jquery", "jquery", handleResponse);
+getRepoContributors(repoOwner, repoName, handleResponse);
