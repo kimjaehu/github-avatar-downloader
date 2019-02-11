@@ -2,32 +2,35 @@ var request = require('request');
 var fs = require('fs');
 var secrets = require('./secrets.js');
 
-// function getRepoContributors(repoOwner, repoName, cb) {
+function getRepoContributors(repoOwner, repoName, cb) {
 
-//     var options = {
-//         url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
-//         headers: {
-//           'User-Agent': 'request',
-//           'Authorization': secrets.GITHUB_TOKEN
-//         }
-//       };
-//     request(options,cb);
-// }
+    var options = {
+        url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
+        headers: {
+          'User-Agent': 'request',
+          'Authorization': secrets.GITHUB_TOKEN
+        }
+      };
+    request(options,cb);
+}
 
-// function handleResponse(err, res, body) {
+function handleResponse(err, res, body) {
 
-//     if (!err && res.statusCode === 200) {
-//         var apiBody = JSON.parse(body);
-//         apiBody.forEach(function(url){
-//             console.log(url.avatar_url)
-//         });
-//     } else {
-//         console.log('error')
-//     }
-// }
+    if (!err && res.statusCode === 200) {
+        var apiBody = JSON.parse(body);
+        apiBody.forEach(function(url){
+            avatarUrl = url.avatar_url;
+            var filePath = ('./avatars/' + url.login + '.jpg');
+            console.log(url.login)
+            downloadImageByURL(avatarUrl,filePath);
+        });
+    } else {
+        console.log('error')
+    }
+}
 
-function downloadImageByURL(url, filePath) {
-    request.get(url + filePath)
+function downloadImageByURL(avatarUrl, filePath) {
+    request.get(avatarUrl)
     .on('error', function(err){
         throw err;
     })
@@ -40,14 +43,12 @@ function downloadImageByURL(url, filePath) {
     .on('end', function(){
     console.log('Download complete.')
     })
-    .pipe(fs.createWriteStream(filePath),function (filePath){
-        if (!fs.existsSync(filePath)){
-            fs.mkdirSync(filePath);
-        }
-    });
+    .pipe(fs.createWriteStream(filePath));
         
 }
 
-//getRepoContributors("jquery", "jquery", handleResponse);
-
-downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "avatars/kvirani.jpg")
+// function makeFolder(filePath){
+//     fs.mkdir(filePath, { recursive: true });
+// }
+// fs.makeFolder(filePath)
+getRepoContributors("jquery", "jquery", handleResponse);
