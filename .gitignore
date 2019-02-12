@@ -1,5 +1,6 @@
 # File containing secrets
 secrets.js
+sensitive.env
 
 # Logs
 logs
