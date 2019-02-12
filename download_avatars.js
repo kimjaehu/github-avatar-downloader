@@ -5,18 +5,19 @@ var args = process.argv.slice(2);
 var repoOwner = args[0];
 var repoName = args[1];
 
-//console.log(repoOwner, repoName);
-
 function getRepoContributors(repoOwner, repoName, cb) {
-
+    if (!repoOwner || !repoName){
+        throw "Input needed"
+    } else {
     var options = {
         url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
         headers: {
           'User-Agent': 'request',
           'Authorization': secrets.GITHUB_TOKEN
         }
-      };
+      }
     request(options,cb);
+    }
 }
 
 function handleResponse(err, res, body) {
@@ -30,7 +31,7 @@ function handleResponse(err, res, body) {
             downloadImageByURL(avatarUrl,filePath);
         });
     } else {
-        console.log('error')
+        console.log('error');
     }
 }
 
@@ -41,12 +42,12 @@ function downloadImageByURL(avatarUrl, filePath) {
     })
     .on('response',function(response){
      console.log('Response Status Code: ', response.statusCode); 
-     console.log(response.statusMessage)
+     console.log(response.statusMessage);
      console.log(response.headers['content-type']);
      console.log('Downloading image...');
     })
     .on('end', function(){
-    console.log('Download complete.')
+    console.log('Download complete.');
     })
     .pipe(fs.createWriteStream(filePath));
         
