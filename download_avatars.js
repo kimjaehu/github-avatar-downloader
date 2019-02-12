@@ -6,6 +6,7 @@ var repoOwner = args[0];
 var repoName = args[1];
 
 function getRepoContributors(repoOwner, repoName, cb) {
+    //handling user input in command line
     if (!repoOwner || !repoName){
         throw "Input needed"
     } else {
@@ -19,7 +20,7 @@ function getRepoContributors(repoOwner, repoName, cb) {
     request(options,cb);
     }
 }
-
+//json parse to get avatar url and login information
 function handleResponse(err, res, body) {
 
     if (!err && res.statusCode === 200) {
@@ -34,7 +35,7 @@ function handleResponse(err, res, body) {
         console.log('error');
     }
 }
-
+//download the avatars to avatars folder
 function downloadImageByURL(avatarUrl, filePath) {
     request.get(avatarUrl)
     .on('error', function(err){
@@ -53,8 +54,4 @@ function downloadImageByURL(avatarUrl, filePath) {
         
 }
 
-// function makeFolder(filePath){
-//     fs.mkdir(filePath, { recursive: true });
-// }
-// fs.makeFolder(filePath)
 getRepoContributors(repoOwner, repoName, handleResponse);
